@@ -1,0 +1,42 @@
+En dessasemblant le binaire level2, on trouve deux fonctions:
+
+main() et p()
+
+main fait un simple appel a p().
+p() décalre un pointer, un tableau, ainsi qu'un int qui n'est pas utilisé.
+La fonction va lire sur l'entrée standart, et stocker le resultat dans le
+tableau 'src', ensuite une vérification est faite sur le pointeur, si cette
+condition est vrai, le programme affiche l'adresse du pointeur et quitte.
+Si la condition est fausse, la chaine de caractère est affiché et copié, puis la
+fonction retourne au main.
+
+En utilisant le site 'Buffer Overflow EIP Offset String Generator' :
+https://projects.jason-rush.com/tools/buffer-overflow-eip-offset-string-generator/?eip-length=100&eip-output-string=Output+string+goes+here
+
+On apprend que le tableau fait 80 bytes de taille.
+Comme le tableau 'src' est déclaré apres 'unaff_retaddr', cette derniere adresse
+sera écrasé par les données qui dépasse du buffer 'src.
+
+La variable 'unaff_retaddr' est déclaré mais pas initialisé, elle pointe donc
+sur le pointeur d'instruction.
+Comme la condition vérifie que le premier byte qui overflow le tableau commence
+par '0xb' (adresse de stack), on ne peut directement placer l'adresse de notre
+nopsled dedans.
+Par contre, on peut y déclarer toute autre valeur, comme par exemple l'adresse
+de l'instruction 'return' de cette fonction.
+Pour ensuite rediriger l'EIP sur notre nopsled, on y rajoute l'adresse en plus.
+Soit [80 bytes pour remplir le buffer] + [Adresse instruction ret] + [&Nopsled].
+En ajoutant cet addresse, nous allons réécrire la sauvegarde EIP, qui est stocké
+avant l'appel a 'call p()'. Le programme essayera donc de reprendre son
+execution normal en revenant de la fonction p(), mais l'adresse de notre nopsled
+y sera stocké, et l'EIP executera notre shellcode.
+
+En code:
+
+export SLEDCODE=$(python -c 'print "\x90"*128')$(cat shellcode.bin)
+
+python -c 'print "B"*80 + "\xff\xff\xff\x08" + "\x8c\xf8\xff\xbf"' > /tmp/buffer
+
+cat /tmp/buffer - | ./level2
+
+Et on obtien un shell!
