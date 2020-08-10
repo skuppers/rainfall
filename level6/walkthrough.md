@@ -1,6 +1,6 @@
 ## Level 6
 
-En dessasemblant le code, on observe une premiere allocation de 0x40 (64) bytes,
+En dessasemblant le code, on observe une premiere allocation de `0x40 (64)` bytes,
 pour stocker l'entrée de l'utilisateur.
 Ensuite on observe une deuxieme allocation, un tableau, ou la premiere adresse
 pointe sur la fonction m().
@@ -18,6 +18,8 @@ On localise donc l'adresse de n(): `0x08048454`.
 Sachant que l'espace mémoire est continue, il nous suffit donc de remplir les
 premier 64 bytes puis de remplir le tableau de pointeur de fonction par l'adresse de n().
 
-`./level6 $(python -c 'print "B" *64 + "\x54\x84\x04\x08"*4')`
+`$ ./level6 "[64 bytes de remplissage] + [Quatre fois l'adresse de n()]"`
+
+`$ ./level6 $(python -c 'print "B" *64 + "\x54\x84\x04\x08"*4')`
 
 Et le tour est joué.
