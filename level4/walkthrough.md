@@ -26,6 +26,7 @@ fonction `p()` entre le `fgets()` et le `printf()`. On sait donc qu'il faudra ut
 `'%12$n'`.
 
 Avec toutes ces informations, on construit donc la commande:
+
 `$ python -c 'print "\x10\x98\x04\x08" + "B"*16930112 + "%12$n"' | ./level4`
 
 Sauf que écrire plus de 16 millions de `B` ne fonctionne évidement pas. (Et tant mieux)
