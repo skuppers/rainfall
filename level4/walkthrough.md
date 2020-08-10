@@ -22,7 +22,7 @@ On commence par trouver l'offset de notre argument dans la stack:
 > BBBB %x %x %x %x %x %x %x %x %x %x %x %x
 
 On observe que la valeur `0x42424242 (BBBB)` est décalé de 12, due a l'appel de
-fonction p() entre le `fgets()` et le `printf()`. On sait donc qu'il faudra utiliser
+fonction `p()` entre le `fgets()` et le `printf()`. On sait donc qu'il faudra utiliser
 `'%12$n'`.
 
 Avec toutes ces informations, on construit donc la commande:
