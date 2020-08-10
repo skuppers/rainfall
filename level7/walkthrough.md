@@ -39,15 +39,15 @@ On affiche les parametres placé sur la stack:
 
 Et on observe plusieurs choses: ESP vaut `0x46464646` ce qui correspond a
 `FFFF`, ce qui veut dire que le premier appel a `strcpy()` écrase la destination
-du second appel avec les bytes `20 a 24 (FFFF ici)`. Le second appel essaye donc
-de copier notre deuxieme argument a l'adresse `0x46464646`.
+du second appel avec les bytes `20 a 24 de notre premier argument (FFFF ici)`. Le second appel essaye donc
+de copier notre deuxieme argument vers l'adresse `0x46464646`.
 
 Le but étant de lancer la fonction `m()` après avoir chargé le fichier `.pass`,
 ce qui nous laisse uniquement le choix de 'remplacer' la fonction `puts()` par
 la fonction `m()`.
 
 La fonction `puts()` fait partie de la libc, lors de la compilation le linker va
-remplir les sections `.got` et `.plt` du binaire pour y insérer les adresses de
+remplir les sections `.got (Global Offset Table)` et `.plt (Procedure Linkage Table)` du binaire pour y insérer les adresses de
 ces fonctions. Comme par hasard, le binaire est compilé sans `RELRO (Relocation
 Read-Only)`, ce qui veut dire que nous avons la possibilité de réécrire les
 données de ces sections, pour y remplacer, par exemple, l'adresse de `puts()`
@@ -57,7 +57,7 @@ Déssasemblons a présent, l'appel a `puts()`:
 
 ![image](https://user-images.githubusercontent.com/29956389/89813576-2f882f00-db42-11ea-87a8-1e902b62b6d0.png)
 
-On observe un `jmp DWORD PTR ds:0x8049928`, l'adresse de `puts()` dans la
+On observe un `jmp DWORD PTR ds:0x8049928`: l'adresse de `puts()` dans la
 section `.got`.
 
 ![image](https://user-images.githubusercontent.com/29956389/89813735-6a8a6280-db42-11ea-9293-87bbd7924eca.png)
@@ -70,6 +70,8 @@ On connais a présent, l'adresse a remplacer, maintenant cherchons l'adresse de
 On obtient: `0x080484f4`.
 
 Avec tout les informations en main, passons a l'exploitation (dans gdb):
+
+`r "[20 bytes de rempissage] + [L'adresse a écraser]" "[L'adresse de la fonction m()]"`
 
 ![image](https://user-images.githubusercontent.com/29956389/89814901-2c8e3e00-db44-11ea-9950-33db0e303e43.png)
 
