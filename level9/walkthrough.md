@@ -50,9 +50,30 @@ Allons plus loin dans l'analyse de la destination:
 
 Voila donc la source su segfault, en dépassant, nous réécrivons sur une adresse déja utilisé. 
 
+Continuons donc jusqu'au prochain breakpoint, et regardont l'opération:
 
+`=> 0x08048682 <+142>:   mov    edx,DWORD PTR [eax]`
 
+![image](https://user-images.githubusercontent.com/29956389/89925747-1e075b80-dc04-11ea-8de5-72ee12931235.png)
 
+En essayant de metrre `$EAX (0x42424242)` dans `$EDX`, le programme segfault car cet espace mémoire n'est pas valide. C'est donc ici que nous pouvont inserer une adresse choisis, pour rediriger l'execution. (`call edx` est appellé trois instructions plus loin). 
 
+On essaye alors d'y mettre l'adresse de notre string (l'adresse destination du `memcpy()` et non l'adresse de l'argument de la stack).
 
+On rajoute également un breakpoint avant l'instruction `=> 0x08048693 <+159>:   call   edx`
 
+![image](https://user-images.githubusercontent.com/29956389/89927408-8d7e4a80-dc06-11ea-871d-8f7d54073e4f.png)
+
+Maintenant que nous avons reussi a affecter `$EDX`, l'instruction `call` essaye de executer a cette adresse. (Car `call` n'est qu'un alias pour `push eip, jmp 0xadresse`).
+
+Il faut donc maintenant, faire pointer `$EDX` vers une adresse valide, et c'est la que nous allons insérer notre shellcode. Ce qui nous donne:
+
+`[Adresse de notre shellcode] + [SHELLCODE] + [Remplissage] + [Adresse de notre string]`.
+
+Soit,
+
+`[4 Bytes] + [28 Bytes de shellcode] + [76 (108 - 32) Bytes de remplissage] + [4 Bytes]`.
+
+![image](https://user-images.githubusercontent.com/29956389/89928623-6294f600-dc08-11ea-8f82-1ec2b0c5eeec.png)
+
+Et mercee.
