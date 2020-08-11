@@ -56,6 +56,12 @@ On step donc jusqu'au breakpoint, avec la commande `login`:
 
 ![image](https://user-images.githubusercontent.com/29956389/89893264-5133f580-dbd8-11ea-8907-664f8db643f6.png)
 
+Et on observe que notre input passé a `service` est 16 bytes plus loin que l'input de `auth`. Ce qui veut dire que le 32 byte de l'input de `auth` (celui qui est vérifié pour lancer `system()`), est le 16eme byte de l'input de `service`.
 
+Il nous suffit donc uniquement de fournir un `auth` quelconque et un `service` de 16 bytes:
+
+![image](https://user-images.githubusercontent.com/29956389/89893791-4c237600-dbd9-11ea-8b38-b300f3a4d077.png)
+
+Et on obtient un shell !
 
 
