@@ -1,0 +1,61 @@
+## Level 8
+
+En lanceant le binaire, on observe un affichage de `(nil), (nil)`.
+Peut importe ce qu'on écrit, le retour reste le meme.
+
+![image](https://user-images.githubusercontent.com/29956389/89891530-8854d780-dbd5-11ea-9ce1-6d55f60aa886.png)
+
+Le déssasemblage du binaire révèle un code plutot long et fastidieux a comprendre. Mais juste la fonction `main()` est définis.
+
+En regardant les strings contenue dans le binaire, on observe `auth`, `service`, `reset` et `login`. Cela s'apparente a des commandes.
+
+On observe également les variable globale `_auth` et `_service`,
+respectivement au adresse `0x08049aac` et `0x08049ab0`.
+
+![image](https://user-images.githubusercontent.com/29956389/89891759-eed9f580-dbd5-11ea-96f4-e7074fa22e38.png)
+
+L'instruction qui nous affiche `(nil), (nil)` est la suivante:
+
+![image](https://user-images.githubusercontent.com/29956389/89891926-32346400-dbd6-11ea-8d69-fd5be25fb565.png)
+
+Elle affiche donc l'adresse des variable `_auth` et `_service`.
+
+En cherchans un peu plus, on observe un plusieurs appel a des fonction systèmes:
+
+- `strcpy()` apres `auth`
+- `strdup()` apres `service`
+- `free()` apres `reset`
+- `system(/bin/sh)` apres `login`
+
+Cet dernier appel est celui qui nous intéresse, mais une condition préalable
+doit etre vrai pour executer cet appel:
+
+![image](https://user-images.githubusercontent.com/29956389/89892279-b686e700-dbd6-11ea-9a0c-9493a0a4faae.png)
+
+Elle verifie que le 32eme bytes(8 x 4 bytes) de la variable `_auth` est différente de `0`.
+
+Essayon donc, au lieu de mieux comprendre le code déssasemblé, de mieux
+comprendre la gestion mémoire du binaire.
+
+On lance donc le binaire dans GDB, on place quelque breakpoint autour de la
+condition de `login`.
+
+![image](https://user-images.githubusercontent.com/29956389/89892615-3a40d380-dbd7-11ea-86ca-787fc1a8a9f1.png)
+
+On lance le programme et on rentre les commandes trouvé auparavent avec des argument facile a localiser dans la mémoire:
+
+![image](https://user-images.githubusercontent.com/29956389/89892770-76743400-dbd7-11ea-81bf-e73346eb6ecd.png)
+
+Les adresse pointé par les global sont affiché !
+
+On step donc jusqu'au breakpoint, avec la commande `login`:
+
+![image](https://user-images.githubusercontent.com/29956389/89893047-f4d0d600-dbd7-11ea-8fc0-c7dd891221be.png)
+
+![image](https://user-images.githubusercontent.com/29956389/89893151-20ec5700-dbd8-11ea-99c9-bed7f143f121.png)
+
+![image](https://user-images.githubusercontent.com/29956389/89893264-5133f580-dbd8-11ea-8907-664f8db643f6.png)
+
+
+
+
