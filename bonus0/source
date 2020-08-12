@@ -1,0 +1,51 @@
+void p(char *dest, char *s)
+{
+    undefined *puVar1;
+    char *buffer;
+    
+    puts(s);
+    read(0, &buffer, 4096);
+    puVar1 = (undefined *)strchr(&buffer, 10);
+    *puVar1 = 0;
+    strncpy(dest, &buffer, 20);
+    return;
+}
+
+void pp(char *destination_finale)
+{
+    char cVar1;
+    uint32_t uVar2;
+    char *pcVar3;
+    char *var_3ch;
+    int32_t first_destination;
+    int32_t second_destination;
+    
+    p((char *)&first_destination, '-');
+    p((char *)&second_destination, '-');
+    strcpy(destination_finale, &first_destination);
+
+    uVar2 = 0xffffffff;
+    pcVar3 = destination_finale;
+    do
+    {
+        if (uVar2 == 0) break;
+        uVar2--;
+
+        cVar1 = *pcVar3;
+        pcVar3++;
+
+    } while (cVar1 != '\0');
+
+    *(undefined2 *)(destination_finale + (strlen(destination_finale) - 1)) = *(undefined2 *)0x80486a4;
+    strcat(destination_finale, &second_destination);
+    return;
+}
+
+undefined4 main(void)
+{
+    char buffer[54];
+    
+    pp(buffer);
+    puts(buffer);
+    return 0;
+}
