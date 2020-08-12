@@ -24,7 +24,7 @@ de notre shellcode.
 On utilisera un fichier pour insérer notre input, cela sera plus facile que
 d'insérer des caractères non-imprimables a la main dans GDB.
 
-`python -c 'print 'i'*64 + '\x0a' + 'ABCDEFGHI' + '\xef\xbe\xad\xde' + '\x0a' > /tmp/xploit`
+`$ python -c 'print 'i'*64 + '\x0a' + 'ABCDEFGHI' + '\xef\xbe\xad\xde' + '\x0a' > /tmp/xploit`
 
 ![image](https://user-images.githubusercontent.com/29956389/90002664-3ecac200-dc93-11ea-8bb9-36ca70d1177b.png)
 
@@ -32,6 +32,21 @@ On obtient un `SIGSEGV` sur une adresse différente, et dans la fonction `p()`,
 bizarre. Observons ce qui se passe avec un breakpoint avant l'appel a `strchr()`:
 
 ![image](https://user-images.githubusercontent.com/29956389/90003198-07104a00-dc94-11ea-818b-b6eecc69e87d.png)
+
+On observe que la premier ligne `iiii...` est évalué une deuxième fois par
+`strchr()`, alors que le `\n` a déja été remplacé par une `\0`, ce qui explique
+le `SIGSEGV` a l'instruction d'apres:
+
+![image](https://user-images.githubusercontent.com/29956389/90003648-a8979b80-dc94-11ea-877c-81d9e1f0801f.png)
+
+Cela est du au fonctionnement de `read()` (On se souvient du GetNextLine), tout
+le fichier est lu jusqu'au `\0` ou `4096` bytes. Notre ligne avec notre adresse
+a executer se retrouve au mauvais endroit dans la stack! Il fau donc remplacer
+`print 'i'*64 + \x0a` dans notre commande par `print 'i'*4095 + '\x0a'`.
+
+On réesaye avec la commande corrigé:
+
+`$ python -c 'print "i"*4095 + "\x0a" + "ABCDEFGHI" + "\xef\xbe\xad\xde" + "\x0a"' > /tmp/xploit`
 
 
 
