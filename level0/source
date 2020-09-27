@@ -1,15 +1,23 @@
-undefined4 main(undefined4 placeholder_0, char **envp)
+toi<atoi <atoica
+// Classic c program main
+main(char **av)
 {
-    int32_t iVar1;
-    undefined4 uStack32;
+    // sub esp,0x20  ; 32
+    int32_t int1;
+    
+    
+    char* string1;
+    
     undefined4 uStack28;
     undefined4 uStack24;
     undefined4 uStack20;
     
-    iVar1 = atoi(envp[1]);
-    if (iVar1 == 0x1a7)
+    // call 0x8049710 <atoi>
+    int1 = atoi(envp[1]);
+    
+    if (int1 == 0x1a7)
     {
-        uStack32 = __strdup("/bin/sh");
+        string1 = __strdup("/bin/sh");
         uStack28 = 0;
         uStack20 = getegid();
         uStack24 = geteuid();
