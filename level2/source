@@ -2,8 +2,6 @@ void p(void)
 {
     // SUB    esp, 0x68                 ; 104 bytes
     
-
-    
     //  MOV    eax, ds:0x8049860        ; Charge stdout dans $eax
     //  MOV    DWORD PTR [esp], eax     ; Push eax on stack
     //  CALL   0x80483b0 <fflush@plt>   ; Call fflush
