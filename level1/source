@@ -1,15 +1,36 @@
 void run(void)
 {
-    fwrite("Good... Wait what?\n", 1, 0x13, _reloc.stdout);
+    // MOV    eax, ds:0x80497c0         ; $eax now points on stdout 
+    // MOV    edx, eax                  ; put content of $eax into $edx
+    // MOV    eax, 0x8048570            ; Puts 'Good... Wait what?\n' into eax
+    // MOV    DWORD PTR [esp+0xc], edx  ; Pushes the content of $edx on the stack
+    // MOV    DWORD PTR [esp+0x8], 0x13 ; Pushes 0x13 onto the stack
+    // MOV    DWORD PTR [esp+0x4], 0x1  ; Pushes 0x1 onto the stack
+    // MOV    DWORD PTR [esp],eax       ; Puts the content of $eax onto the stack
+    // CALL   0x8048350 <fwrite@plt>    ; Call to write in the procedure linkage table
+    
+    fwrite("Good... Wait what?\n", 1, 0x13, stdout);
+    
+    // MOV    DWORD PTR [esp], 0x8048584    ; Puts the content of 0x8048584 onto the stack. (/bin/sh)
+    // CALL   0x8048360 <system@plt>        ; Call to system in the procedure linkage table
+    
     system("/bin/sh");
+    
     return;
 }
 
 void main(void)
 {
-    undefined auStack80 [76];
+    // SUB   esp, 0x50             ; 0x50 (80) bytes sont alloué sur la stack
+    // LEA   eax, [esp+0x10]       ; The resulting value (the address) of esp+0x10 is stored into $eax. (0x40)
     
-    gets(auStack80);
+    char    buffer[64];             
+    
+    // MOV   DWORD PTR [esp], eax  ; Pushes $eax on the stack
+    
+    // CALL 0x8048340 <gets@plt>   ; Calls gets with the $eax argument: buffer
+    
+    gets(buffer);
+    
     return;
 }
-

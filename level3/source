@@ -1,0 +1,49 @@
+void v()
+{
+  // SUB    esp, 0x218            ; 536 bytes allocation for stack
+  
+  // MOV    eax,ds:0x8049860      ; stdin
+  // MOV    DWORD PTR [esp+0x8], eax
+  // MOV    DWORD PTR [esp+0x4], 0x200
+  
+  // LEA    eax, [ebp-0x208]
+  char  *str;
+  
+  // MOV    DWORD PTR [esp], eax
+  // CALL   0x80483a0 <fgets@plt>
+  fgets(&str, 0x200, stdin);
+  
+  // lea    eax,[ebp-0x208]
+  // mov    DWORD PTR [esp],eax
+  // call   0x8048390 <printf@plt>
+  printf(str);
+  
+  // mov    eax, ds:0x804988c   ; Address of global variable _m
+  // cmp    eax, 0x40           ; Compare _m to 0x40
+  // jne    0x8048518 <v+116>
+  if (_m == 0x40)
+  {
+    // mov    eax,ds:0x8049880        ; Put stdout into eax
+    // mov    edx, eax
+    // mov    eax, 0x8048600          ; Contains "Wait what?!\n"
+    // mov    DWORD PTR [esp+0xc], edx
+    // mov    DWORD PTR [esp+0x8], 0xC
+    // mov    DWORD PTR [esp+0x4], 0x1
+    // mov    DWORD PTR [esp], eax
+    // call   0x80483b0 <fwrite@plt>
+    fwrite("Wait what?!\n", 1, 0xC, stdout);
+   
+    // mov    DWORD PTR [esp],0x804860d   ; Put /bin/sh on the stack
+    // call   0x80483c0 <system@plt>
+    system("/bin/sh");
+   }
+  
+  return;
+}
+
+int main(void)
+{
+  // CALL 0x80484a4 <v>
+  v();
+  return;
+}

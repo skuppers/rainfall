@@ -1,22 +1,59 @@
 void p(void)
 {
-    uint32_t unaff_retaddr;
-    char *src;
-    int32_t var_ch;
+    // SUB    esp, 0x68                 ; 104 bytes
     
-    fflush(_reloc.stdout);
+    //  MOV    eax, ds:0x8049860        ; Charge stdout dans $eax
+    //  MOV    DWORD PTR [esp], eax     ; Push eax on stack
+    //  CALL   0x80483b0 <fflush@plt>   ; Call fflush
+    fflush(stdout);
+    
+    // LEA    eax, [ebp - 0x4c]         ; Loads address into $eax ( ebp - 76 )
+    char src[76];
+    
+    // MOV    DWORD PTR [esp], eax      ; Pushes content of $eax on the stack
+    // CALL   0x80483c0 <gets@plt>
     gets(&src);
-    if ((unaff_retaddr & 0xb0000000) == 0xb0000000) {
+    
+    // mov    eax, DWORD PTR [ebp + 0x4]      ; Puts the address of ebp + 4 into $eax
+    // mov    DWORD PTR [ebp-0xC], eax        ; Puts content of $eax into ebp-0xC
+    void      addr;
+    
+    // mov    eax, DWORD PTR [ebp-0xc]         ; $eax points on ebp - 0xC
+    // and    eax, 0xb0000000                  ; Bitwise and with $eax
+    // cmp    eax, 0xb0000000                  ; Check if they are equal, which means $eax points on the stack
+    // jne    0x8048527 <p+83>                 ; If $eax does not point on the stack, go to  <p+83> 
+    
+    if ((addr & 0xb0000000) == 0xb0000000)
+    {
+        // MOV    eax, 0x8048620                ; Puts '(%p)\n' into $eax
+        // MOV    edx, DWORD PTR [ebp - 0xc]    ; ebp - 12
+        // MOV    DWORD PTR [esp+0x4], edx
+        // MOV    DWORD PTR [esp], eax
+        // CALL   0x80483a0 <printf@plt>
         printf("(%p)\n", unaff_retaddr);
-        _exit(1);
+        
+        // MOV    DWORD PTR [esp], 0x1  ; Puts 1 on the stack
+        // CALL   0x80483d0 <_exit@plt>
+        exit(1);
     }
-    puts(&src);
-    strdup(&src);
+    
+    // LEA    eax, [ebp - 0x4c]          ; Loads address into $eax ( ebp - 76 )
+    // MOV    DWORD PTR [esp], eax       ; Puts content of $eax on the stack
+    // CALL   0x80483f0 <puts@plt>       ; Call to puts
+    puts(src);
+    
+    // LEA    eax, [ebp-0x4c]            ; Loads address into $eax ( ebp - 76 )
+    // MOV    DWORD PTR [esp] ,eax       ; Puts content of $eax on the stack
+    // CALL   0x80483e0 <strdup@plt>     ; Call to strdup
+    strdup(src);
+    
     return;
 }
 
 void main(void)
 {
+    // CALL   0x80484d4 <p>
     p();
+    
     return;
 }
