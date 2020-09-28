@@ -22,7 +22,7 @@ void run(void)
 void main(void)
 {
     // SUB   esp, 0x50             ; 0x50 (80) bytes sont alloué sur la stack
-    // LEA   eax, [esp+0x10]       ; The resulting value of esp+0x10 is stored into $eax. (0x40)
+    // LEA   eax, [esp+0x10]       ; The resulting value (the address) of esp+0x10 is stored into $eax. (0x40)
     
     char    buffer[64];             
     
