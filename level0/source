@@ -1,35 +1,49 @@
-toi<atoi <atoica
+
 // Classic c program main
 main(char **av)
-{
-    // sub esp,0x20  ; 32
-    int32_t int1;
+{ 
+    // SUB esp,0x20   ; Stack meory allocation for variables
     
     
-    char* string1;
+    // MOV   eax, DWORD PTR[ebp+0xc]    ;  $eax is now pointing on **av
+    // ADD   eax, 0x4			;  $eax is now av[1]
+    // MOV   eax, DWORD PTR[eax]	;  Sizing to DWORD
+    // MOV   DWORD PTR [esp], eax	;  Setting stack pointer to eax or av[1] 
+    // CALL  0x8049710 <atoi>		;  Call to atoi with av[1] as argument
     
-    undefined4 uStack28;
-    undefined4 uStack24;
-    undefined4 uStack20;
+    atoi(envp[1]);
     
-    // call 0x8049710 <atoi>
-    int1 = atoi(envp[1]);
+    // CMP   eax, 0x1a7			; Comparing atoi's return to 0x1a7 (423)
     
-    if (int1 == 0x1a7)
-    {
-        string1 = __strdup("/bin/sh");
-        uStack28 = 0;
-        uStack20 = getegid();
-        uStack24 = geteuid();
-
-        __setresgid(uStack20, uStack20, uStack20);
-        setresuid(uStack24, uStack24, uStack24);
-        
-		execv("/bin/sh", &uStack32);
+    if (atoi(envp[1]) != 0x1a7)
+    { 
+    	// MOV   DWORD PTR [esp], 0x80c5348   ; Moving the content of the address 0x80c5348 into $esp.  0x80c5348 contains '/bin/sh'.
+	// CALL  0x8050bf0 <strdup>
+	// MOV    DWORD PTR [esp+0x10], eax   ; Saving the return of strdup into $esp+0x10
+	
+        char *pointer = strdup("/bin/sh");
+	
+        // CALL   <getegid>       ; Getting effective gid & uid
+	// CALL   <geteuid>
+	// CALL   <setresgid>     ; Setting effective gid & uid
+	// CALL   <setresuid>
+	
+        // LEA   eax, [esp+0x10]                ; Loading the address of $esp+0x10 which is the return of strdup: '/bin/sh'
+	// MOV   DWORD PTR [esp+0x4], eax	; Putting the content of $eax on the stack 
+	// MOV	 DWORD PTR [esp], 0x80c5348     ; Putting the content of 0x80c5348 on the stack. 0x80c5348 contains '/bin/sh'.
+	// CALL  0x8048f80 <execv>
+	
+	execv("/bin/sh", &pointer);
     }
-    else
-    {
-        _IO_fwrite("No !\n", 1, 5, _stderr);
+    else  
+    {                                
+ 	// MOV    eax,0x80c5350      ; Contains 'No !\n'
+ 	// MOV    DWORD PTR [esp+0xc],edx
+        // MOV    DWORD PTR [esp+0x8],0x5
+ 	// MOV    DWORD PTR [esp+0x4],0x1
+ 	// MOV    DWORD PTR [esp],eax
+ 	// CALL   0x804a230 <fwrite>
+        fwrite("No !\n", 1, 5, stderr);
     }
     return 0;
 }
