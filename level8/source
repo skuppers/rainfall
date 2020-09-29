@@ -1,31 +1,33 @@
 undefined4 main(void)
 {
-    char cVar1;
-    int32_t iVar2;
-    uint32_t uVar3;
-    uint8_t *puVar4;
-    char *pcVar5;
-    uint8_t *puVar6;
-    bool bVar7;
-    undefined uVar8;
-    undefined uVar9;
-    bool bVar10;
-    undefined uVar11;
-    uint8_t uVar12;
+
     uint8_t auStack144 [5];
     char acStack139 [2];
     undefined auStack137 [125];
-    int32_t var_bp_8h;
     
-    uVar12 = 0;
-    do {
+    char    *buffer;
+    
+    while (true) 
+    {   
+        /* <main+45> 0x8049ab0 contains the variable _auth, 0x8049aac contains the variable _service */
+        /* 0x8048810 contains '%p, %p \n'  */
         printf("%p, %p \n", _auth, _service);
-        iVar2 = fgets(auStack144, 0x80, _reloc.stdin);
+        
+        /* <main+74> Variable buffer @ esp+x20 - ds:0x8049a80 is stdin */
+        /* test eax,eax is error handling */
+        if (fgets(buffer, 0x80, stdin) == 0)
+            break;
+        
+        /* <main+87>  0x8048819 contains 'auth ' */
+        if (strncmp(buffer, "auth ", 5) == 0)
+        
+        
         bVar7 = false;
         bVar10 = iVar2 == 0;
         if (bVar10) {
             return 0;
         }
+        
         iVar2 = 5;
         puVar4 = auStack144;
         puVar6 = (uint8_t *)"auth ";
@@ -37,6 +39,7 @@ undefined4 main(void)
             puVar4 = puVar4 + (uint32_t)uVar12 * -2 + 1;
             puVar6 = puVar6 + (uint32_t)uVar12 * -2 + 1;
         } while (bVar10);
+        
         uVar8 = 0;
         uVar11 = (!bVar7 && !bVar10) == bVar7;
         if ((bool)uVar11) {
@@ -109,6 +112,6 @@ undefined4 main(void)
                 system("/bin/sh");
             }
         }
-    } while( true );
+    }
 }
 
