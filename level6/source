@@ -10,15 +10,41 @@ void m(void)
     return;
 }
 
-void main(undefined4 placeholder_0, char **envp)
+void main(char **av)
 {
-    undefined4 uVar1;
-    code **ppcVar2;
+    // sub    esp,0x20                  ; 0x20 bytes for variables
+    void malloc1;
+    void malloc2;
     
-    uVar1 = malloc(0x40);
-    ppcVar2 = (code **)malloc(4);
-    *ppcVar2 = m;
-    strcpy(uVar1, envp[1]);
-    (**ppcVar2)();
+    // MOV    DWORD PTR [esp], 0x40     ; Push 0x40 on the stack
+    // CALL   0x8048350 <malloc@plt>
+    // MOV    DWORD PTR [esp+0x1c], eax ; Save return of malloc at esp+0x1c
+    malloc1 = malloc(64);
+    
+    // MOV    DWORD PTR [esp], 0x4      ; Push 0x4 on the stack
+    // CALL   0x8048350 <malloc@plt>
+    // MOV    DWORD PTR [esp+0x18], eax ; Save return of malloc at esp+0x18
+    malloc2 = malloc(4);
+    
+    // MOV    edx, 0x8048468            ; Address of function <m>
+    // MOV    eax, DWORD PTR [esp+0x18] ; $eax points to 'malloc2'
+    // MOV    DWORD PTR [eax], edx      ; Put the address of <m> into 'malloc2'
+    malloc2 = m;
+    
+    // MOV    eax, DWORD PTR [ebp+0xc]  ; $eax points to 'char **av'
+    // ADD    eax, 0x4                  ; $eax points to 'av[1]'
+    // MOV    eax, DWORD PTR [eax]      ; Get the content
+    // MOV    edx, eax                  ; Copy to $edx
+    // MOV    eax, DWORD PTR [esp+0x1c] ; $eax points to 'malloc1'
+    // MOV    DWORD PTR [esp+0x4], edx  ; av[1] is pushed on stack 
+    // MOV    DWORD PTR [esp],eax       ; malloc1 is pushed on stack
+    // CALL   0x8048340 <strcpy@plt>
+    strcpy(malloc1, av[1]);
+    
+    // MOV    eax, DWORD PTR [esp+0x18] ; esp+18 the start of malloc2, where the address of <m> is stored
+    // MOV    eax, DWORD PTR [eax]      ; get the content
+    // CALL   eax                       ; call the function stored in $eax
+   (*malloc2)();
+    
     return;
 }
