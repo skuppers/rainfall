@@ -1,30 +1,105 @@
 void m(void)
 {
-    undefined4 uVar1;
+    // sub    esp,0x18
+    time_t tm;
     
-    uVar1 = time(0);
-    printf("%s - %d\n", c, uVar1);
+    // mov    DWORD PTR [esp], 0x0
+    // call   0x80483d0 <time@plt>
+    tm = time(0);
+    
+    // mov    edx, 0x80486e0                    ; Puts "%s - %d\n" into edx
+    // mov    DWORD PTR [esp+0x8], eax          ; Puts the return of time() onto the stack
+    // mov    DWORD PTR [esp+0x4], 0x8049960    ; Variable c
+    // mov    DWORD PTR [esp], edx              ; Puts "%s - %d\n" onto the stack
+    // call   0x80483b0 <printf@plt>
+    printf("%s - %d\n", 0x8049960, tm);
+    
     return;
 }
 
-undefined4 main(undefined4 placeholder_0, char **envp)
+undefined4 main(char **av)
 {
-    undefined4 *puVar1;
-    undefined4 uVar2;
-    undefined4 *puVar3;
+    void *malloc_1;
+	void *malloc_2;
+	void *malloc_3;
+	void *malloc_4;
+	FILE *file;
     
-    puVar1 = (undefined4 *)malloc(8);
-    *puVar1 = 1;
-    uVar2 = malloc(8);
-    puVar1[1] = uVar2;
-    puVar3 = (undefined4 *)malloc(8);
-    *puVar3 = 2;
-    uVar2 = malloc(8);
-    puVar3[1] = uVar2;
-    strcpy(puVar1[1], envp[1]);
-    strcpy(puVar3[1], envp[2]);
-    uVar2 = fopen("/home/user/level8/.pass", 0x80486e9);
-    fgets(c, 0x44, uVar2);
+    // mov    DWORD PTR [esp], 0x8			; Pushes 8 on the stack
+    // call   0x80483f0 <malloc@plt>
+    // mov    DWORD PTR [esp+0x1c], eax		; Save malloc's return into esp+0x1c
+    malloc_1 = (void *)malloc(8);
+	
+    // mov    eax, DWORD PTR [esp+0x1c] 	; $eax points to malloc_1
+    // mov    DWORD PTR [eax], 0x1			; Set the content of malloc_1 to 1
+	*malloc_1 = 1;
+	
+    // mov    DWORD PTR [esp], 0x8			; Pushes 8 on the stack
+    // call   0x80483f0 <malloc@plt>
+    // mov    edx, eax						; Save malloc's return into $edx
+    malloc_2 = (void *)malloc(8);
+    
+	// mov    eax, DWORD PTR [esp+0x1c]		; $eax points to malloc_1
+    // mov    DWORD PTR [eax+0x4], edx		; Sets the value of $eax+4 to $edx
+    malloc_1[1] = malloc_2;
+	
+    // mov    DWORD PTR [esp], 0x8			; Pushes 8 on the stack
+    // call   0x80483f0 <malloc@plt>
+	// mov    DWORD PTR [esp+0x18], eax 	; Save malloc's return into esp+0x18
+    malloc_3 = (void *)malloc(8);
+    
+	// mov    eax, DWORD PTR [esp+0x18]		; $eax points to malloc_3
+	// mov    DWORD PTR [eax], 0x2			; Set value of $eax to 0x2
+    *malloc_3 = 2;
+    
+    // mov    DWORD PTR [esp], 0x8			; Pushes 8 on the stack
+    // call   0x80483f0 <malloc@plt>
+	// mov    edx, eax						; Save malloc's return into $edx
+    malloc_4 = (void *)malloc(8);
+	
+	// mov    eax, DWORD PTR [esp+0x18]		; $eax points to esp+0x18 -> malloc_3
+	// mov    DWORD PTR [eax+0x4], edx		; Sets the value of $eax+0x4 to $edx
+	malloc_3[1] = malloc_4;
+   
+ 	// mov    eax, DWORD PTR [ebp+0xc]		; $eax points to **av 
+    // add    eax, 0x4						; $eax points to av[1]
+	// mov    eax, DWORD PTR [eax]			; $eax now has the value of av[1]
+	// mov    edx, eax						; Put the value of av[1] into $edx
+	// mov    eax, DWORD PTR [esp+0x1c]		; $eax points to malloc_1
+	// mov    eax, DWORD PTR [eax+0x4]		; $eax points to malloc_1[1]
+	// mov    DWORD PTR [esp+0x4], edx		; Put av[1] on the stack
+	// mov    DWORD PTR [esp], eax			; Push $eax on the stack
+	// call   0x80483e0 <strcpy@plt>
+	strcpy(malloc_1[1], av[1]);
+	
+	// mov    eax, DWORD PTR [ebp+0xc]		; $eax points to **av 
+	// add    eax, 0x8						; $eax points to av[2]
+    // mov    eax, DWORD PTR [eax]			; $eax now has the value of av[2]
+    // mov    edx, eax						; Put the value of av[2] into $edx
+    // mov    eax, DWORD PTR [esp+0x18]		; $eax points to malloc_3
+    // mov    eax, DWORD PTR [eax+0x4]		; $eax points to malloc_3[1]
+    // mov    DWORD PTR [esp+0x4], edx		; Put av[2] on the stack
+    // mov    DWORD PTR [esp], eax			; Push $eax on the stack
+    // call   0x80483e0 <strcpy@plt>
+	strcpy(malloc_3[1], av[2]);
+	 
+	// mov    edx, 0x80486e9				; Contains 'r'
+	// mov    eax, 0x80486eb				; Contains '/home/user/level8/.pass'
+	// mov    DWORD PTR [esp+0x4], edx		; Push $edx onto stack
+	// mov    DWORD PTR [esp], eax			; Push $eax onto the stack
+	// call   0x8048430 <fopen@plt>
+	// mov    DWORD PTR [esp+0x8], eax		; Save's return of fopen into esp+0x8
+	file = fopen("/home/user/level8/.pass", 'r');
+	
+	// mov    DWORD PTR [esp+0x4], 0x44
+	// mov    DWORD PTR [esp], 0x8049960	; Push global variable c onto stack
+	// call   0x80483c0 <fgets@plt>
+    fgets(c, 0x44, file);
+	
+	// mov    DWORD PTR [esp], 0x8048703	; 0x8048703 contains '~~'
+	// call   0x8048400 <puts@plt>
     puts(0x8048703);
+	
+	// mov    eax, 0x0
     return 0;
 }
