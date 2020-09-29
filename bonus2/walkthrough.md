@@ -36,11 +36,18 @@ On insère donc notre shellcode + nopsled dans l'environnement:
 
 On localise l'adresse du sled:
 
-`(gdb)> x/4s *((char**)environ + 8)`
+`(gdb)> x/4s *((char**)environ)`
 
-`> de 0xbffff733 a 0xbffff8fc`
+Commande a laquelle nous ajoutons +1 jusqu'a trouver l'adresse de la variable
+environ, puis nous cherchons l'adresse de la variable suivante.
 
-Soit `0xbffff805` vers le milieu. Ce qui nous donne:
+Nous faisons ensuite la difference de ces deux adresses pour avoir la marge de
+notre sled, puis nous divison cette difference par deux pour aller au millieu,
+et enfin nous ajoutons le resultat de cette division a l'adresse de la variable
+SHELCODE pour diriger notre code au millieu de notre nopsled.
+
+une fois cette addresse obtenue, nous la faisons passer dans le second argument
+de notre exploit: 
 
 `$ ./bonus2 $(python -c 'print [40 bytes de remplissage]') $(python -c 'print [18 bytes de remplissage] + [Adresse nopsled]')`
 
