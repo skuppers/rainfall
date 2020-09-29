@@ -8,11 +8,13 @@ qui va nous intéresser. Elle affiche le caractère ` - `, lit sur l'entrée
 standard, et stocke le resultat dans un buffer de `4096` bytes. Ensuite l'appel
 a `strchr()` va checher le caractère `10 (\n)` dans le buffer, et le remplace
 par `0 (\0)`, enfin, l'appel a `strncpy()` copie les 20 premiers bytes du buffer
-dans la destination passé en argument a la fonction `p()`.
+dans la destination passé en argument a la fonction `p()`. 
+Apres ces deux copies dans deux buffer distincs, un premier buffer est copie dans le buffer passé en parametre a pp avec un `strcpy()`. Un espace est inserré a la fin du buffer, puis la second string copié est ajoutée dans le buffer avec un `strcat()`. 
 
-Cette fonction est vulnérable, en particulier l'appel a `strchr()`, car si aucun
-`\n` n'est présent dans le buffer, la fonction renvoie `NULL`, et l'instruction d'après
-essayera d'ecraser la valeur de cette adresse par `\0`.
+La fonction strncpy de p nous interesse particulierement, cat lorsque dst est superieur ou egal la len, la string src n'est pas terminée par un `\0`.
+
+L'astuce ici consiste a ecrire dans le premier buffer une chaine de caracteres termine par un '\0', mais dans le second une chaine non terminée. Les deux buffers etant cote a cote, le strcpy dans pp copiera bien 20 caracteres, mais le strcat copiera 40 caracteres(les deux buffers a la suite). Le buffer originel faisant 54 caracteres, nous avons un overflow que nous pouvons exploiter a loisir.
+
 
 #### Amusons nous a présent avec la mémoire
 
