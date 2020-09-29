@@ -1,10 +1,9 @@
 void v()
 {
-  // SUB    esp, 0x218            ; 536 bytes allocation for stack
-  
-  // MOV    eax,ds:0x8049860      ; stdin
-  // MOV    DWORD PTR [esp+0x8], eax
-  // MOV    DWORD PTR [esp+0x4], 0x200
+  // SUB    esp, 0x218                ; 536 bytes allocation for stack
+  // MOV    eax, ds:0x8049860         ; stdin
+  // MOV    DWORD PTR [esp+0x8], eax  ; Push content of $eax on the stack
+  // MOV    DWORD PTR [esp+0x4], 0x200; Push 0x200 on the stack
   
   // LEA    eax, [ebp-0x208]
   char  *str;
@@ -13,31 +12,30 @@ void v()
   // CALL   0x80483a0 <fgets@plt>
   fgets(&str, 0x200, stdin);
   
-  // lea    eax,[ebp-0x208]
-  // mov    DWORD PTR [esp],eax
+  // lea    eax, [ebp-0x208]          ; Loads char *str
+  // mov    DWORD PTR [esp], eax      ; Pushes on the stack
   // call   0x8048390 <printf@plt>
   printf(str);
   
-  // mov    eax, ds:0x804988c   ; Address of global variable _m
+  // mov    eax, ds:0x804988c   ; Puts the content of address of global variable _m into $eax
   // cmp    eax, 0x40           ; Compare _m to 0x40
   // jne    0x8048518 <v+116>
   if (_m == 0x40)
   {
-    // mov    eax,ds:0x8049880        ; Put stdout into eax
+    // mov    eax, ds:0x8049880        ; Put stdout into eax
     // mov    edx, eax
-    // mov    eax, 0x8048600          ; Contains "Wait what?!\n"
-    // mov    DWORD PTR [esp+0xc], edx
-    // mov    DWORD PTR [esp+0x8], 0xC
-    // mov    DWORD PTR [esp+0x4], 0x1
-    // mov    DWORD PTR [esp], eax
+    // mov    eax, 0x8048600           ; Contains "Wait what?!\n"
+    // mov    DWORD PTR [esp+0xc], edx ; Push on stack
+    // mov    DWORD PTR [esp+0x8], 0xC ; Push on stack
+    // mov    DWORD PTR [esp+0x4], 0x1 ; Push on stack
+    // mov    DWORD PTR [esp], eax     ; Push on stack
     // call   0x80483b0 <fwrite@plt>
     fwrite("Wait what?!\n", 1, 0xC, stdout);
    
     // mov    DWORD PTR [esp],0x804860d   ; Put /bin/sh on the stack
     // call   0x80483c0 <system@plt>
     system("/bin/sh");
-   }
-  
+  }
   return;
 }
 
