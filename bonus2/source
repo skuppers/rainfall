@@ -1,0 +1,55 @@
+#include <strings.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+int language = 0;
+
+struct s_data {
+	char data[72];
+};
+
+struct s_data fi = {"Hyvää päivää "};
+struct s_data nl = {"Goedemiddag! "};
+
+void greetuser(struct s_data data)
+{
+	struct s_data buffer;
+
+	if (language == 1)
+	{
+		buffer = fi;
+
+	}
+	else if (language == 2)
+	{
+		buffer = nl;
+	}
+	strcat(buffer.data, data.data);
+	puts(buffer.data);
+	return;
+}
+
+int main(int ac, char **av)
+{
+	//char data[160];
+	struct s_data data;
+	char *env_var;
+	if (ac != 3)
+	{
+		return 0;
+	}
+	bzero(data.data, 13);
+	strncpy(data.data, av[1], 40);
+	strncpy(data.data + 40, av[2], 32);
+	if(!(env_var = getenv("LANG")))
+	{
+		return 0;
+	}
+	if (memcmp(env_var, "fi", 2))
+		language = 1;
+	if (memcmp(env_var, "nl", 2))
+		language = 2;
+	greetuser(data);
+  	return 0;
+}
