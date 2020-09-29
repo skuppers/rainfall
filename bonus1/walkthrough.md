@@ -5,9 +5,7 @@ sont donnees:
 
 ![Capture d’écran 2020-08-12 à 14 17 02](https://user-images.githubusercontent.com/25014717/90013973-932b6d00-dca6-11ea-95a2-c392c4596d87.png)
 
-Nous decompilons le binaire pour comprendre comment il fonctionne:
-
-![Capture d’écran 2020-08-12 à 14 20 09](https://user-images.githubusercontent.com/25014717/90014204-f3221380-dca6-11ea-8d32-8ac8d0b02af9.png)
+Nous reversons le binaire pour comprendre comment il fonctionne (voir source).
 
 Ce programme prends deux arguments: le premier est converti en int via atoi, et
 si le resultat de la conversion est inferieur a 10, un memcopy du deuxieme

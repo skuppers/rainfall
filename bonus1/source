@@ -1,0 +1,21 @@
+#include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+int main(int argc, char *argv[])
+{
+	char buffer[40];
+	int num;
+
+	num = atoi(argv[1]);
+	if (num <= 9)
+	{
+		memcpy(buffer, argv[2], num * 4);
+		if (num == 1464814662)
+		{
+			execl("/bin/sh", "sh", NULL);
+		}
+		return 0;
+	}
+	return 1;
+}

