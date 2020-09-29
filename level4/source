@@ -6,11 +6,28 @@ void p(char *format)
 
 void n(void)
 {
-    char *s;
+    // SUB    esp, 0x218                    ; 0x218 bytes for stack variables
+    // MOV    eax, ds:0x8049804             ; Stdin
+    // MOV    DWORD PTR [esp+0x8], eax      ; Push stdin on stack
+    // MOV    DWORD PTR [esp+0x4], 0x200    ; Push 0x200 on stack
+    // LEA    eax, [ebp-0x208]
+    char    *str;
     
-    fgets(&s, 0x200, _reloc.stdin);
-    p((char *)&s);
-    if (_m == 0x1025544) {
+    // MOV    DWORD PTR [esp], eax          ; Push 'char *str' on stack
+    // CALL   0x8048350 <fgets@plt>
+    fgets(&s, 0x200, stdin);
+    
+    // LEA    eax, [ebp-0x208]              ; Loads 'char *str' into $eax
+    // MOV    DWORD PTR [esp], eax          ; Push on stack
+    // CALL   0x8048444 <p>
+    p(str);
+    
+    // MOV    eax, ds:0x8049810             ; Loads value of global variable _m into $eax
+    // CMP    eax, 0x1025544                ; Compares $eax with 0x1025544 (16930116)
+    if (_m == 0x1025544)
+    {
+        // MOV    DWORD PTR [esp], 0x8048590    ; 0x8048590 contains "/bin/cat /home/user/level5/.pass"
+        // CALL   0x8048360 <system@plt>
         system("/bin/cat /home/user/level5/.pass");
     }
     return;
@@ -18,6 +35,7 @@ void n(void)
 
 void main(void)
 {
+    // CALL   0x8048457 <n>
     n();
     return;
 }
