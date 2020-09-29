@@ -1,0 +1,41 @@
+void o(void)
+{
+  // sub    esp, 0x18                   ; 0x18 bytes for local stack variables
+  // MOV    DWORD PTR [esp], 0x80485f0  ; 0x80485f0 contains '/bin/sh'
+  // CALL   0x80483b0 <system@plt>
+   system("/bin/sh");
+  
+  // MOV    DWORD PTR [esp],0x1
+  // CALL   0x8048390 <_exit@plt>
+  exit(1);
+}
+
+void n()
+{
+  // SUB    esp,0x218                   ; 0x218 bytes for local stack variables
+  // MOV    eax, ds:0x8049848           ; stdin
+  // MOV    DWORD PTR [esp+0x8], eax    ; push stdin onto stack
+  // MOV    DWORD PTR [esp+0x4], 0x200  ; push 0x200 onto stack
+  // LEA    eax, [ebp-0x208]            ; Load address of ebp-0x208
+  char      *str;
+  
+  // MOV    DWORD PTR [esp], eax        ; Push str onto stack
+  // CALL   0x80483a0 <fgets@plt>
+  fgets(&std, 0x200, stdin);
+  
+  // LEA    eax, [ebp-0x208]            ; Load address of ebp-0x208 ( char *str )
+  // MOV    DWORD PTR [esp], eax        ; push onto stack
+  // CALL   0x8048380 <printf@plt>
+  printf(&str);
+  
+  // MOV    DWORD PTR [esp], 0x1
+  // CALL   0x80483d0 <exit@plt>
+  exit(1);
+}
+
+void main(void)
+{
+  //  CALL   0x80484c2 <n>
+  n();
+  return;
+}
