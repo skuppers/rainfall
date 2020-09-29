@@ -1,11 +1,16 @@
 void n(void)
 {
+    // SUB    esp, 0x18
+    // MOV    DWORD PTR [esp], 0x80485b0    ; 0x80485b0 contains '/bin/cat /home/user/level7/.pass'
+    // CALL   0x8048370 <system@plt>
     system("/bin/cat /home/user/level7/.pass");
     return;
 }
 
 void m(void)
 {
+    // MOV    DWORD PTR [esp], 0x80485d1    ; 0x80485d1 contains 'Nope'
+    // CALL   0x8048360 <puts@plt>
     puts("Nope");
     return;
 }
