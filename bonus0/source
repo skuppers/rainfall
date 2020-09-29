@@ -1,51 +1,41 @@
-void p(char *dest, char *s)
+#include <sys/types.h>
+#include <sys/uio.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+
+void p(char *buffer, char *line)
 {
-    undefined *puVar1;
-    char *buffer;
-    
-    puts(s);
-    read(0, &buffer, 4096);
-    puVar1 = (undefined *)strchr(&buffer, 10);
-    *puVar1 = 0;
-    strncpy(dest, &buffer, 20);
-    return;
+	char stdin_buff[4096];
+
+	puts(line);
+	read(0, stdin_buff, 4096);
+	*strchr(stdin_buff, '\n') = 0;
+	strncpy(buffer, stdin_buff, 20);
+	return;
 }
 
-void pp(char *destination_finale)
+void pp(char *buffer)
 {
-    char cVar1;
-    uint32_t uVar2;
-    char *pcVar3;
-    char *var_3ch;
-    int32_t first_destination;
-    int32_t second_destination;
-    
-    p((char *)&first_destination, '-');
-    p((char *)&second_destination, '-');
-    strcpy(destination_finale, &first_destination);
+	char first[20];
+	char second[20];
+	uint32_t len;
 
-    uVar2 = 0xffffffff;
-    pcVar3 = destination_finale;
-    do
-    {
-        if (uVar2 == 0) break;
-        uVar2--;
-
-        cVar1 = *pcVar3;
-        pcVar3++;
-
-    } while (cVar1 != '\0');
-
-    *(undefined2 *)(destination_finale + (strlen(destination_finale) - 1)) = *(undefined2 *)0x80486a4;
-    strcat(destination_finale, &second_destination);
-    return;
+	p(second, " - ");
+	p(first, " - ");
+	strcpy(buffer, second);
+	len = strlen(buffer);
+	buffer[len - 1] = ' ';
+	buffer[len] = '\0';
+	strcat(buffer, first);
+	return;
 }
 
-undefined4 main(void)
+int main(int ac, char *av[])
 {
-    char buffer[54];
-    
-    pp(buffer);
-    puts(buffer);
-    return 0;
+	char buffer[54];
+
+	pp(buffer);
+	puts(buffer);
+	return 0;
 }
