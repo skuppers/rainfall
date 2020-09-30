@@ -3,7 +3,7 @@
 Lors de notre arrive dans le compte level5, un
 sommaire des informations concernant le binaire a exploiter nous est donne:
 
-![Capture d’écran 2020-08-10 à 13 31 40](https://user-images.githubusercontent.com/25014717/89778520-f6ce6280-db0d-11ea-8e79-5a5658097ed5.png)
+![Capture d’écran 2020-08-10 à 13 31 40](https://user-images.githubusercontent.com/25014717/89778520-f6ce6280-db0d-11ea-8e79-5a5658097ed5.png)
 
 Nous desassemblons et decompilons le binaire pour comprendre son fonctionnement:
 
@@ -22,16 +22,16 @@ sorte que cette fonction o se lance. Pour se faire, nous allons dans un premier
 temps determiner ou nous pouvons placer l'adresse de la variable a modifier dans
 notre chaine format: 
 
-![Capture d’écran 2020-08-10 à 13 39 44](https://user-images.githubusercontent.com/25014717/89779111-fbdfe180-db0e-11ea-940b-36637197008c.png)
+![Capture d’écran 2020-08-10 à 13 39 44](https://user-images.githubusercontent.com/25014717/89779111-fbdfe180-db0e-11ea-940b-36637197008c.png)
 
 Maintenant que nous savons ou placer l'adresse a modifier, il nous faut
 determiner quelle est elle. Pour prendre le controle de l'execution, nous
-voulons remplacer l'adresse stocke dans l'instruction pointeur de l'appel a
+voulons reecrire l'adresse a laquelle l'eip devra retourner a la fin du
 printf. En effet, en modifiant cette valeur, lorsque printf aura fini son
 execution et voudra retourner a sa fonction appelante, le code sautera au lieu
 de notre choix. Nous determinons l'adresse de ce pointeur a l'aide de gdb:
 
-![Capture d’écran 2020-08-10 à 13 47 33](https://user-images.githubusercontent.com/25014717/89779608-11a1d680-db10-11ea-9e7b-d74bf436fa70.png)
+![Capture d’écran 2020-08-10 à 13 47 33](https://user-images.githubusercontent.com/25014717/89779608-11a1d680-db10-11ea-9e7b-d74bf436fa70.png)
 
 Grace a gdb, nous savons que l'eip est stocke a l'adresse "0xbffff4fc". Pour
 valider que cette adresse est bien celle que nous recherchons, nous regardons
@@ -42,7 +42,7 @@ Nous devons maintenant determiner ce que nous voulons placer dans la variable,
 c'est a dire, ou nous voulons faire sauter notre code. Nous recuperons pour cela
 l'adresse du debut de la fonction "o":
 
-![Capture d’écran 2020-08-10 à 13 50 51](https://user-images.githubusercontent.com/25014717/89779857-8a089780-db10-11ea-8c77-494da7d667d0.png)
+![Capture d’écran 2020-08-10 à 13 50 51](https://user-images.githubusercontent.com/25014717/89779857-8a089780-db10-11ea-8c77-494da7d667d0.png)
 
 Toutes les informations dont nous avons besoin etant en notre possesion,
 l'exploit est desormais possible. Nous devons placer a l'adresse "0xbffff4fc" la
@@ -50,6 +50,6 @@ valeur "0x080484a4", soit 134513828. Comme nous imprimons avant les 4
 charactères de l'adresse, nous devons soustraire 4 dans notre chaine de format,
 pour compenser. Et nous avons ainsi acces au shell: 
 
-![Capture d’écran 2020-08-10 à 14 02 56](https://user-images.githubusercontent.com/25014717/89780782-5e86ac80-db12-11ea-8f90-c98408973bc6.png)
+![Capture d’écran 2020-08-10 à 14 02 56](https://user-images.githubusercontent.com/25014717/89780782-5e86ac80-db12-11ea-8f90-c98408973bc6.png)
 
-![Capture d’écran 2020-08-10 à 14 03 54](https://user-images.githubusercontent.com/25014717/89780777-5dee1600-db12-11ea-8c8b-d6b99fd5af27.png)
+![Capture d’écran 2020-08-10 à 14 03 54](https://user-images.githubusercontent.com/25014717/89780777-5dee1600-db12-11ea-8c8b-d6b99fd5af27.png)
