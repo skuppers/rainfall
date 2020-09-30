@@ -7,11 +7,12 @@ sommaire des informations concernant le binaire a exploiter nous est donne:
 
 Nous desassemblons et decompilons le binaire pour comprendre son fonctionnement:
 
-![Capture d’écran 2020-08-10 à 13 33 45](https://user-images.githubusercontent.com/25014717/89778695-401eb200-db0e-11ea-96cb-5bda0fdfec91.png)
+![image](https://user-images.githubusercontent.com/29956389/94686151-b67bab80-032a-11eb-9799-c449981c32d7.png)
 
-![Capture d’écran 2020-08-10 à 13 34 10](https://user-images.githubusercontent.com/25014717/89778692-3f861b80-db0e-11ea-9e4b-e4ff010a52df.png)
+![image](https://user-images.githubusercontent.com/29956389/94686169-bda2b980-032a-11eb-9461-7d41e9e3552e.png)
 
-![Capture d’écran 2020-08-10 à 13 34 25](https://user-images.githubusercontent.com/25014717/89778690-3eed8500-db0e-11ea-97a2-3dcbbe3d5711.png)
+![image](https://user-images.githubusercontent.com/29956389/94686185-c4313100-032a-11eb-8fd5-41e96a664780.png)
+
 
 Nous avons donc le main, qui appelle la fonction n. Cette fonction n lit sur
 l'entree standard une string, directement passe comme argument a printf. Nous
