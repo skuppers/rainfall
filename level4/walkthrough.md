@@ -16,7 +16,7 @@ formats strings.
 p() fait juste un appel a printf();
 
 
-Par contre, la valeur a réécrite dans `_m` vaut `0x1025544` soit `16 930 116` en
+Par contre, la valeur a réécrite dans `m` vaut `0x1025544` soit `16 930 116` en
 décimal. Cette variable se situe a l'adresse `0x08049810`.
 
 On commence par trouver l'offset de notre argument dans la stack:
