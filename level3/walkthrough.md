@@ -7,14 +7,12 @@ sommaire des informations concernant le binaire a exploiter nous est donne:
 
 Nous le desassemblons et decompilons pour regarder comment il fonctionne:
 
-![Capture d’écran 2020-08-09 à 22 24 12](https://user-images.githubusercontent.com/25014717/89741154-386bf880-da8f-11ea-938f-64e529110470.png)
+![image](https://user-images.githubusercontent.com/29956389/94684852-ed50c200-0328-11eb-863e-9dedae67d881.png)
 
-![Capture d’écran 2020-08-09 à 22 24 25](https://user-images.githubusercontent.com/25014717/89741153-37d36200-da8f-11ea-9282-85577f268448.png)
+![image](https://user-images.githubusercontent.com/29956389/94684901-f93c8400-0328-11eb-8e31-ea24420b3d01.png)
 
 Le code est assez simple: la fonction v est execute. Dans cette fonction, le
-programme lit un maximum de 0x200(512) charactères sur l'entree sandard dans l'array
-format, array ensuite directement passe a printf pour etre affiche. Suite a cela, si la variable "m" (le _
-est pour signfier qu'elle est globale) est egale a 0x40(64), l'acces a un shell nous est donne.
+programme lit un maximum de 0x200(512) charactères sur l'entree standard. Cette chaine est ensuite directement passé a printf pour etre affiche. Suite a cela, si la globale "m" est egale a 0x40(64), l'acces a un shell nous est donné.
 Le defi consiste donc a assigner cette valeur la variable "m":
 
 ![Capture d’écran 2020-08-09 à 22 32 34](https://user-images.githubusercontent.com/25014717/89741287-42dac200-da90-11ea-8739-9a833e920d13.png)
