@@ -33,7 +33,7 @@ de notre choix. Nous determinons l'adresse de ce pointeur a l'aide de gdb:
 
 ![Capture d’écran 2020-08-10 à 13 47 33](https://user-images.githubusercontent.com/25014717/89779608-11a1d680-db10-11ea-9e7b-d74bf436fa70.png)
 
-Grace a gdb, nous savons que l'eip est stocke a l'adresse "0xbffff4fc". Pour
+Grace a gdb, nous savons que l'adresse qui nous interesse est stocke a l'adresse "0xbffff4fc". Pour
 valider que cette adresse est bien celle que nous recherchons, nous regardons
 son contenu, et nous voyons bien que l'adresse stockee est celle de la prochaine
 instruction apres l'appel a printf de la fonction n.
