@@ -31,7 +31,11 @@ de l'instruction `return` de cette fonction meme fonction. Cela nous permetra de
 Le calcul a effectuer pour avoir l'adresse du millieu de notre nopsled est le suivant : 
  - Adresse variable SHELLCODE + (Adresse variable SHELLCODE+ 1 - Addresse variable SHELCODE) / 2
  
- Pour chercher l'adresse de la variable SHELLCODE: 
+ La commande pour examiner l'environnement: 
+ 
+(gdb)> x/4s *((char**)environ)
+
+Commande a laquelle nous ajoutons +1 jusqu'a trouver l'adresse de la variable SLEDCODE, puis nous cherchons l'adresse de la variable suivante.
 
 Soit `[80 bytes pour remplir le buffer] + [Adresse instruction ret de la fonction p()] + [Adresse millieu du Nopsled]`.
 
