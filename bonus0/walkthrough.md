@@ -26,7 +26,7 @@ de notre shellcode.
 On utilisera un fichier pour insérer notre input, cela sera plus facile que
 d'insérer des caractères non-imprimables a la main dans GDB.
 
-`$ python -c 'print 'i'*64 + '\x0a' + 'ABCDEFGHI' + '\xef\xbe\xad\xde' + '\x0a' > /tmp/xploit`
+`$ python -c 'print "i"*64 + "\x0a" + "ABCDEFGHI" + "\xef\xbe\xad\xde" + "\x0a"' > /tmp/xploit`
 
 ![image](https://user-images.githubusercontent.com/29956389/90002664-3ecac200-dc93-11ea-8bb9-36ca70d1177b.png)
 
