@@ -1,6 +1,6 @@
 ## Level 4
 
-Comme au niveau précédent, nous décompilons le binaire.
+Comme au niveau précédent, nous désassemblons le binaire.
 
 Appart le main, on retrouve deux fonctions p() et n().
 
