@@ -26,7 +26,7 @@ par `0xb (adresse de stack)`, on ne peut pas directement placer l'adresse de not
 nopsled dedans (Qui serait d'habitude soit sur la stack, soit dans l'environement).
 
 Par contre, on peut y déclarer toute autre valeur, comme par exemple l'adresse
-de l'instruction `return` de cette fonction meme fonction. Cela nous permetra de retourner deux fois de la fonction: une premiere fois pour passer la verification, puis une deuxieme fois pour aller a notre shellcode. c'est pourquoi il faut bien ecrire l'adresse du millieu de notre nopsled ensuite.
+de l'instruction `return` de cette meme fonction. Cela nous permetra de retourner deux fois de la fonction: une premiere fois pour passer la verification, puis une deuxieme fois pour aller a notre shellcode. c'est pourquoi il faut bien ecrire l'adresse du millieu de notre nopsled ensuite.
 
 Le calcul a effectuer pour avoir l'adresse du millieu de notre nopsled est le suivant : 
  - Adresse variable SLEDCODE + (Adresse variable SLEDCODE+ 1 - Addresse variable SLEDCODE) / 2
