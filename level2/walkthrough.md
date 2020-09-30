@@ -19,7 +19,7 @@ Si la condition est vrai, le programme affiche l'adresse du pointeur et quitte.
 Si la condition est fausse, la chaine de caractère est affiché et copié, puis la
 fonction quitte.
 
-Le pointeur [ebp + 0x4] est en dehors de notre stackframe, la condition vérifie donc si un overflow a modifié l'adresse a cette adresse, qui est l'EIP.
+Le pointeur [ebp + 0x4] est en dehors de notre stackframe, la condition vérifie donc si un overflow a modifié l'adresse a cette adresse, qui est l'adresse de retour a laquelle la fonction sautera a la fin de l'execution.
 
 Comme la condition vérifie que le premier byte qui overflow le tableau commence
 par `0xb (adresse de stack)`, on ne peut pas directement placer l'adresse de notre
