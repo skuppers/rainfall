@@ -45,10 +45,12 @@ l'adresse du debut de la fonction "o":
 ![Capture d’écran 2020-08-10 à 13 50 51](https://user-images.githubusercontent.com/25014717/89779857-8a089780-db10-11ea-8c77-494da7d667d0.png)
 
 Toutes les informations dont nous avons besoin etant en notre possesion,
-l'exploit est desormais possible. Nous devons placer a l'adresse "0xbffff4fc" la
+l'exploit est desormais possible. Nous devons placer a l'adresse de retour de l'eip, ici "0xbffff4fc", la
 valeur "0x080484a4", soit 134513828. Comme nous imprimons avant les 4
 charactères de l'adresse, nous devons soustraire 4 dans notre chaine de format,
-pour compenser. Et nous avons ainsi acces au shell: 
+pour compenser. L'adresse de l'eip sauvegardée est suceptible de changer, donc toujours la récupérer directement, mais le reste est fixe.
+
+Et nous avons ainsi acces au shell: 
 
 ![Capture d’écran 2020-08-10 à 14 02 56](https://user-images.githubusercontent.com/25014717/89780782-5e86ac80-db12-11ea-8f90-c98408973bc6.png)
 
