@@ -16,7 +16,7 @@ respectivement au adresse `0x08049aac` et `0x08049ab0`.
 
 L'instruction qui nous affiche `(nil), (nil)` est la suivante:
 
-![image](https://user-images.githubusercontent.com/29956389/89891926-32346400-dbd6-11ea-8d69-fd5be25fb565.png)
+![image](https://user-images.githubusercontent.com/29956389/94690219-1f195700-0330-11eb-8522-5fad0967a9ab.png)
 
 Elle affiche donc l'adresse des variable `_auth` et `_service`.
 
@@ -30,7 +30,7 @@ En cherchans un peu plus, on observe un plusieurs appel a des fonction systèmes
 Cet dernier appel est celui qui nous intéresse, mais une condition préalable
 doit etre vrai pour executer cet appel:
 
-![image](https://user-images.githubusercontent.com/29956389/89892279-b686e700-dbd6-11ea-9a0c-9493a0a4faae.png)
+![image](https://user-images.githubusercontent.com/29956389/94690441-6b649700-0330-11eb-80d8-95497d931d2d.png)
 
 Elle verifie que le 32eme bytes(8 x 4 bytes) de la variable `_auth` est différente de `0`.
 
@@ -63,5 +63,3 @@ Il nous suffit donc uniquement de fournir un `auth` quelconque et un `service` d
 ![image](https://user-images.githubusercontent.com/29956389/89893791-4c237600-dbd9-11ea-8b38-b300f3a4d077.png)
 
 Et on obtient un shell !
-
-

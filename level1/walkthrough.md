@@ -1,13 +1,12 @@
 ## Level 1
 
-Avec objdump, on observe deux fonctions: `main()` et `run()`.
+Avec objdump ou GDB, on observe deux fonctions: `main()` et `run()`.
 
 `run()` n'est jamais appelé mais, on y voit un appel a `system(/bin/sh)`.
 
 `main()` contient un buffer de 64 characteres, qu'on peut overflow, grace au manque de vérification de l'appel `gets`.
 
-On remplis donc le buffer avec des données random, plus l'espace inutilisé, puis on réecrit l'EIP avec
-l'adresse de la fonction run, trouvé avec objdump.
+On remplis donc le buffer avec des données random (64 bytes), plus l'espace inutilisé (12 bytes), puis on réecrit l'EIP avec l'adresse de la fonction <run>, trouvé avec objdump.
 
 `$ python -c "print 'A' * 76 + '\x44\x84\x04\x08'" | ./level1`
 

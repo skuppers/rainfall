@@ -1,10 +1,5 @@
 undefined4 main(void)
 {
-
-    uint8_t auStack144 [5];
-    char acStack139 [2];
-    undefined auStack137 [125];
-    
     char    *buffer;
     
     while (true) 
@@ -16,102 +11,56 @@ undefined4 main(void)
         /* <main+74> Variable buffer @ esp+x20 - ds:0x8049a80 is stdin */
         /* test eax,eax is error handling */
         if (fgets(buffer, 0x80, stdin) == 0)
-            break;
+            return ;
         
         /* <main+87>  0x8048819 contains 'auth ' */
+        /* <main+107> repz cmps BYTE PTR ds:[esi],BYTE PTR es:[edi] */
+        /* <main+124> test eax, eax; jne <main+222> */
         if (strncmp(buffer, "auth ", 5) == 0)
-        
-        
-        bVar7 = false;
-        bVar10 = iVar2 == 0;
-        if (bVar10) {
-            return 0;
-        }
-        
-        iVar2 = 5;
-        puVar4 = auStack144;
-        puVar6 = (uint8_t *)"auth ";
-        do {
-            if (iVar2 == 0) break;
-            iVar2 = iVar2 + -1;
-            bVar7 = *puVar4 < *puVar6;
-            bVar10 = *puVar4 == *puVar6;
-            puVar4 = puVar4 + (uint32_t)uVar12 * -2 + 1;
-            puVar6 = puVar6 + (uint32_t)uVar12 * -2 + 1;
-        } while (bVar10);
-        
-        uVar8 = 0;
-        uVar11 = (!bVar7 && !bVar10) == bVar7;
-        if ((bool)uVar11) {
-            _auth = (undefined4 *)malloc(4);
-            *_auth = 0;
-            uVar3 = 0xffffffff;
-            pcVar5 = acStack139;
-            do {
-                if (uVar3 == 0) break;
-                uVar3 = uVar3 - 1;
-                cVar1 = *pcVar5;
-                pcVar5 = pcVar5 + (uint32_t)uVar12 * -2 + 1;
-            } while (cVar1 != '\0');
-            uVar3 = ~uVar3 - 1;
-            uVar8 = uVar3 < 0x1e;
-            uVar11 = uVar3 == 0x1e;
-            if (uVar3 < 0x1f) {
-                strcpy(_auth, acStack139);
+        {
+            auth = malloc(4);
+            
+            /* <main+156> lea eax,[esp+0x20] ; add eax, 0x5 */
+            /* <+184>:   repnz scas al,BYTE PTR es:[edi] */
+            if (strlen(buffer + 5) <= 30)
+            {
+                /* <main+217> lea edx, [eax+0x5] ; 0x8049aac is auth */
+                strcpy(auth, buffer + 5);
             }
         }
-        iVar2 = 5;
-        puVar4 = auStack144;
-        puVar6 = (uint8_t *)"reset";
-        do {
-            if (iVar2 == 0) break;
-            iVar2 = iVar2 + -1;
-            uVar8 = *puVar4 < *puVar6;
-            uVar11 = *puVar4 == *puVar6;
-            puVar4 = puVar4 + (uint32_t)uVar12 * -2 + 1;
-            puVar6 = puVar6 + (uint32_t)uVar12 * -2 + 1;
-        } while ((bool)uVar11);
-        uVar9 = 0;
-        uVar8 = (!(bool)uVar8 && !(bool)uVar11) == (bool)uVar8;
-        if ((bool)uVar8) {
-            free(_auth);
-        }
-        iVar2 = 6;
-        puVar4 = auStack144;
-        puVar6 = (uint8_t *)"service";
-        do {
-            if (iVar2 == 0) break;
-            iVar2 = iVar2 + -1;
-            uVar9 = *puVar4 < *puVar6;
-            uVar8 = *puVar4 == *puVar6;
-            puVar4 = puVar4 + (uint32_t)uVar12 * -2 + 1;
-            puVar6 = puVar6 + (uint32_t)uVar12 * -2 + 1;
-        } while ((bool)uVar8);
-        uVar11 = 0;
-        uVar8 = (!(bool)uVar9 && !(bool)uVar8) == (bool)uVar9;
-        if ((bool)uVar8) {
-            uVar11 = (uint8_t *)0xfffffff8 < auStack144;
-            uVar8 = auStack137 == (undefined *)0x0;
-            _service = strdup(auStack137);
-        }
-        iVar2 = 5;
-        puVar4 = auStack144;
-        puVar6 = (uint8_t *)"login";
-        do {
-            if (iVar2 == 0) break;
-            iVar2 = iVar2 + -1;
-            uVar11 = *puVar4 < *puVar6;
-            uVar8 = *puVar4 == *puVar6;
-            puVar4 = puVar4 + (uint32_t)uVar12 * -2 + 1;
-            puVar6 = puVar6 + (uint32_t)uVar12 * -2 + 1;
-        } while ((bool)uVar8);
-        if ((!(bool)uVar11 && !(bool)uVar8) == (bool)uVar11) {
-            if (_auth[8] == 0) {
-                fwrite("Password:\n", 1, 10, _reloc.stdout);
-            } else {
-                system("/bin/sh");
-            }
-        }
-    }
+		/* <main+222>  0x804881f contains 'reset' */
+        /* <main+242> repz cmps BYTE PTR ds:[esi], BYTE PTR es:[edi] */
+        /* <main+259> test eax, eax; jne <main+276> */
+		else if (strncmp(buffer, "reset", 5) == 0) {
+			/* <main+263> */
+			free(auth);
+		}
+		/* <main+276>  0x804881f contains 'service' */
+        /* <main+296> repz cmps BYTE PTR ds:[esi], BYTE PTR es:[edi] */
+        /* <main+313> test eax, eax; jne <main+337> */
+		else if (strncmp(input, "service", 6) == 0) {
+			/* <main+317> lea eax,[esp+20] ; add eax, 0x7 */
+            /* <main+332> mov ds:0x8049ab0, eax */
+            service = strdup(input + 7);
+		}
+		/* <main+337>  0x804882d contains 'login' */
+        /* <main+357> repz cmps BYTE PTR ds:[esi], BYTE PTR es:[edi] */
+        /* <main+376> test eax, eax; jne <main+16> */
+		else if (strncmp(input, "login", 5) == 0)
+        {
+            /* <main+387> mov eax, DWORD PTR [eax+0x20] */
+            /* test eax,eax ; je <main+411> */
+			if ((*auth + 32) != 0) 
+            {
+				/* <main+394> 0x8048833 contains "/bin/sh" */
+				system("/bin/sh");
+			}
+            else
+            {
+				/* <main+411> 0x8049aa0 is stdout ; 0x804883b contains "Password:\n" */
+				fwrite("Password:\n", 1, 10, stdout);
+			}
+		}
+	} /* jmp <main+16> */
+	return 0;
 }
-

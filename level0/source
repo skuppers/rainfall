@@ -4,7 +4,6 @@ main(char **av)
 { 
     // SUB esp,0x20   ; Stack meory allocation for variables
     
-    
     // MOV   eax, DWORD PTR[ebp+0xc]    ;  $eax is now pointing on **av
     // ADD   eax, 0x4			;  $eax is now av[1]
     // MOV   eax, DWORD PTR[eax]	;  Sizing to DWORD

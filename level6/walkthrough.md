@@ -1,5 +1,7 @@
 ## Level 6
 
+![image](https://user-images.githubusercontent.com/29956389/94688735-4838e800-032e-11eb-9217-2543a2e9de02.png)
+
 En dessasemblant le code, on observe une premiere allocation de `0x40 (64)` bytes,
 pour stocker l'entrée de l'utilisateur.
 Ensuite on observe une deuxieme allocation, un tableau, ou la premiere adresse

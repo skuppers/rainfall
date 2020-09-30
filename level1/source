@@ -26,7 +26,7 @@ void main(void)
     
     char    buffer[64];             
     
-    // MOV   DWORD PTR [esp], eax  ; Pushes $eax on the stack
+    // MOV   DWORD PTR [esp], eax  ; Pushes $eax on the stack (the address of buffer)
     
     // CALL 0x8048340 <gets@plt>   ; Calls gets with the $eax argument: buffer
     

@@ -7,13 +7,16 @@ Appart le main, on retrouve deux fonctions p() et n().
 n() fonctionne comme a l'exercice d'avant, il faut donc a nouveau exploiter les
 formats strings.
 
-![image](https://user-images.githubusercontent.com/29956389/89816256-84c63f80-db46-11ea-941e-fa91ce5768cc.png)
+![image](https://user-images.githubusercontent.com/29956389/94685649-0312b700-032a-11eb-9d8b-079d598b17ba.png)
+
+![image](https://user-images.githubusercontent.com/29956389/94685679-0dcd4c00-032a-11eb-91fe-978e2c298a96.png)
+
+![image](https://user-images.githubusercontent.com/29956389/94685729-22a9df80-032a-11eb-80d6-26a2ba95b231.png)
 
 p() fait juste un appel a printf();
 
-![image](https://user-images.githubusercontent.com/29956389/89816303-9d365a00-db46-11ea-9b3e-8408b9e31d91.png)
 
-Par contre, la valeur a réécrite dans `_m` vaut `0x1025544` soit `16 930 116` en
+Par contre, la valeur a réécrite dans `m` vaut `0x1025544` soit `16 930 116` en
 décimal. Cette variable se situe a l'adresse `0x08049810`.
 
 On commence par trouver l'offset de notre argument dans la stack:
