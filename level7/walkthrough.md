@@ -60,13 +60,12 @@ Déssasemblons a présent, l'appel a `puts()`:
 On observe un `jmp DWORD PTR ds:0x8049928`: l'adresse de `puts()` dans la
 section `.got`.
 
-![image](https://user-images.githubusercontent.com/29956389/89813735-6a8a6280-db42-11ea-9293-87bbd7924eca.png)
+![image](https://user-images.githubusercontent.com/29956389/94689767-90a4d580-032f-11eb-9fd6-c3b9614ae4cd.png)
 
 On connais a présent, l'adresse a remplacer, maintenant cherchons l'adresse de
-`m()` avec `info func` ou directement dans cutter.
+`m()` avec `info func`.
 
-![image](https://user-images.githubusercontent.com/29956389/89814255-25b2fb80-db43-11ea-87c2-6b880055c3db.png)
-
+![image](https://user-images.githubusercontent.com/29956389/94689897-b7fba280-032f-11eb-81aa-930b6e6bb22e.png)
 On obtient: `0x080484f4`.
 
 Avec tout les informations en main, passons a l'exploitation (dans gdb):
