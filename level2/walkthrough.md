@@ -5,11 +5,11 @@ En dessasemblant le binaire level2, on trouve deux fonctions:
 
 `main()` qui fait un simple appel a `p()`.
 
-`p()` déclare un pointeur, un tableau, ainsi qu'un int qui n'est pas utilisé.
-La fonction va lire sur l'entrée standart, et stocker le resultat dans le
+`p()` déclare un tableau de 76 bytes.
+La fonction va lire sur l'entrée standart, et stocker le resultat dans ce
 tableau `src`.
 
-![image](https://user-images.githubusercontent.com/29956389/89816964-b12e8b80-db47-11ea-93b8-79094726c6be.png)
+![image](https://user-images.githubusercontent.com/29956389/94676129-271acc00-031b-11eb-8e8e-b462d6902a54.png)
 
 Ensuite une vérification est faite sur le pointeur, si la
 condition est vrai, le programme affiche l'adresse du pointeur et quitte.
