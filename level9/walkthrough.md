@@ -1,15 +1,28 @@
 ## Level 9
 
-En déssasemblant le binaire, on observe un code en c++.
+En déssasemblant le binaire, on remarque que le code est en c++, à cause du mangling des fonctions.
 
-Il nous demande une entrée.
+Le binaire verifie dans un premier temps qu'il y a au moins un argument. Grace a l'utilitaire c++filt, nous pouvons retrouver les appels effectués.
 
-On observe un appel a `memcpy()`, qui copie notre entré dans un espace mémoire.
+c++filt -n "_Znwj" nous permet de reveler un premier appel a operator new qui permet d'allouer de la memoire.
 
-On observe également un pointeur sur fonction qui est appellé a la fin du code.
+L'appel ici aloue 0x6c, soit 108 bytes. La classe crée par l'allocation prends donc 108 bytes d'espace memoire.
 
-On devra probablement réécrire ce pointeur sur fonction, pour executer un
-shellcode, sachant qu'il n'y a aucune fonction caché, ou appel a `system()`.
+c++filt -n "_ZN1NC1Ei" nous revele un appel a N::N(int nbr)
+
+Cet appel appelle la fonction N de la classe N, son constructeur donc. Ce contructeur prends prends un int en paramettre, qui est assigné dans la classe a une variable.
+
+Mis bout a bout, ces instructions se résument a créer une nouvelle instance de la classe N en passant en paramettre un int assigné.
+
+La classe N contient trois autres fonctions: un overload d'operateur rhs pour le +, un autre pour le moins, et enfin setAnnotation. 
+
+setAnnotation nous interesse particulierement car il s'agit d'un memcopy de la taille du strlen de av[1], dans le buffer Annotation de l'objet ciblé.
+
+Cette fonction setAnnotation est appelée pour l'objet five.
+
+On observe également un pointeur sur fonction qui est appellé a la fin du code. Cet appel est causé par l'addition de five + six, qui dans les fait appelle la fonction overloadée sur +. 
+
+Pour réaliser notre exploit, nous allons donc remplacer l'adresse de la fonction overloadée par l'adresse de notre choix grace au memcpy(), et la faire pointer sur un shellcode.
 
 On essaye de le faire segfault, et on y arrive avec une entrée de plus de 108 bytes.
 
@@ -48,7 +61,7 @@ Allons plus loin dans l'analyse de la destination:
 
 ![image](https://user-images.githubusercontent.com/29956389/89924810-d16f5080-dc02-11ea-8b1e-dfa19d36a0f8.png)
 
-Voila donc la source su segfault, en dépassant, nous réécrivons sur une adresse déja utilisé. 
+Voila donc la source su segfault, en dépassant, nous réécrivons sur l'adresse de la fonction operator+. 
 
 Continuons donc jusqu'au prochain breakpoint, et regardont l'opération:
 
